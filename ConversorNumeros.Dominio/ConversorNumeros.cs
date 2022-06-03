@@ -7,8 +7,8 @@ namespace ConversorNumeros.Dominio
     {
         private Dictionary<string, int> _dicionarioLetras;
         private int _numeroArabico = 0;
-        private int _contadorLetraI = 0;
-        private int _contadorLetraX = 0;
+        private int _contadorLetra3 = 0;
+        private int _contadorLetra2 = 0;
         private string _letraAnterior;
 
         public ConversorNumeroRomanoParaArabico()
@@ -48,22 +48,42 @@ namespace ConversorNumeros.Dominio
                         _numeroArabico = _numeroArabico + _dicionarioLetras[_letraAnterior];
                 }
 
+                if (_letraAnterior != letraAtual)
+                {
+                    _contadorLetra2 = 0;
+                    _contadorLetra3 = 0;
+                }
+
                 _letraAnterior = letraAtual;
 
-                if (ValidarLetraI(_letraAnterior, _contadorLetraI) == false)
+                if (ValidarLetraComAte3Repeticoes(_letraAnterior, ref _contadorLetra3) == false)
+                    return null;
+                else if (ValidarLetraCom2Repeticoes(_letraAnterior, ref _contadorLetra2) == false)
                     return null;
             }
 
             return _numeroArabico = _numeroArabico + _dicionarioLetras[_letraAnterior];
         }
 
-        private bool ValidarLetraI(string letra, int contadorLetra)
+        private bool ValidarLetraComAte3Repeticoes(string letra, ref int contadorLetra)
         {
-            if (letra == "I")
+            if (letra == "I" || letra == "X" || letra == "C" || letra == "M")
                 contadorLetra++;
 
             if (contadorLetra > 3)
                 return false;
+
+            return true;
+        }
+
+        private bool ValidarLetraCom2Repeticoes(string letra, ref int contadorLetra)
+        { 
+            if (letra == "V" || letra == "L" || letra == "D")
+                contadorLetra++;
+
+            if (contadorLetra > 1)
+                return false;
+
             return true;
         }
     }
